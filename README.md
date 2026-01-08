@@ -119,6 +119,64 @@ Moreover, decomposition can be applied recursively: any layer can itself be furt
 ![Example Image](https://qianwen-res.oss-cn-beijing.aliyuncs.com/Qwen-Image/layered/幻灯片9.JPG)
 
 
+## Cloud API (No GPU Required)
+
+If you don't have a local GPU, you can use the **Fal AI API** to run Qwen-Image-Layered in the cloud.
+
+### Setup
+
+1. Install dependencies:
+```bash
+pip install -r requirements-fal.txt
+```
+
+2. Get your API key from [fal.ai](https://fal.ai) and create a `.env` file:
+```bash
+cp .env.example .env
+# Edit .env and add your FAL_KEY
+```
+
+### Usage
+
+**Command Line:**
+```bash
+# Using test image
+python src/fal_api/run_demo.py --test-image 1 --layers 4
+
+# Using custom image
+python src/fal_api/run_demo.py --image path/to/image.png --layers 5 --output ./my_output
+```
+
+**Python API:**
+```python
+from src.fal_api import ImageLayerDecomposer, LayerExporter
+
+# Decompose image
+decomposer = ImageLayerDecomposer()
+layer_files = decomposer.decompose_and_save(
+    image_source="path/to/image.png",
+    output_dir="./output",
+    num_layers=4,
+)
+
+# Export to multiple formats
+exporter = LayerExporter(layer_files)
+results = exporter.export_all("./output", "my_layers")
+# Results: PNG, PPTX, PSD, ZIP
+```
+
+**Simple one-liner:**
+```python
+from src.fal_api.decompose import decompose_image
+
+layer_files = decompose_image("image.png", output_dir="./output", num_layers=4)
+```
+
+### Cost
+- Approximately **$0.05 per image**
+- Processing time: 15-30 seconds
+
+
 ## License Agreement
 
 Qwen-Image-Layered is licensed under Apache 2.0. 
