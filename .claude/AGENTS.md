@@ -24,6 +24,26 @@ Defines automated triggers and task delegation patterns.
 
 ---
 
+## Available Skills
+
+| Skill | Trigger Keywords | Action |
+|-------|------------------|--------|
+| image-decompose | decompose, layer | Image to RGBA layers |
+| layer-export | export, PPTX, PSD | Export to formats |
+| quick-edit | resize, rotate, color | Simple edits |
+| background-remove | background, remove | 2-layer separation |
+
+## Available SubAgents
+
+| Agent | When to Use | Purpose |
+|-------|-------------|---------|
+| BatchProcessor | 2+ images | Bulk processing with progress |
+| LayerEditor | Complex edits | Multi-step editing pipeline |
+| CompositionEngine | Combining layers | Moodboards, collages |
+| QualityChecker | After decompose | Validate result quality |
+
+---
+
 ## Skills vs SubAgents
 
 ### Skills (Auto-Trigger)
