@@ -177,6 +177,39 @@ layer_files = decompose_image("image.png", output_dir="./output", num_layers=4)
 - Processing time: 15-30 seconds
 
 
+## AI Agent System (Claude Code Integration)
+
+This project includes a Claude Code agent system for natural language control.
+
+### Available Skills (Auto-trigger)
+
+| Skill | Trigger Keywords | Action |
+|-------|------------------|--------|
+| `image-decompose` | decompose, layer, separate | Decompose image to layers |
+| `layer-export` | export, PPTX, PSD, save | Export to various formats |
+| `quick-edit` | resize, rotate, color | Simple layer edits |
+| `background-remove` | background, remove | Foreground/background separation |
+
+### Available SubAgents (Task Delegation)
+
+| Agent | When to Use | Purpose |
+|-------|-------------|---------|
+| `BatchProcessor` | Multiple images | Bulk processing with progress |
+| `LayerEditor` | Complex edits | Multi-step editing pipeline |
+| `CompositionEngine` | Combining layers | Moodboards, collages |
+| `QualityChecker` | After decomposition | Validate result quality |
+
+### Example Commands
+
+```
+"Decompose this image into 5 layers"
+"Remove background from photo.jpg"
+"Export layers to PPTX"
+"Process all images in the photos folder"
+"Create a moodboard with these images"
+```
+
+
 ## License Agreement
 
 Qwen-Image-Layered is licensed under Apache 2.0. 
