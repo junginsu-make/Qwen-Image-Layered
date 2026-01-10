@@ -179,18 +179,40 @@ layer_files = decompose_image("image.png", output_dir="./output", num_layers=4)
 
 ## AI Agent System (Claude Code Integration)
 
-This project includes a Claude Code agent system for natural language control.
+This project includes a Claude Code agent system for natural language control with **20 Skills** and **6 SubAgents**.
 
-### Available Skills (Auto-trigger)
+### System Pipeline
 
-| Skill | Trigger Keywords | Action |
-|-------|------------------|--------|
-| `image-decompose` | decompose, layer, separate | Decompose image to layers |
-| `layer-export` | export, PPTX, PSD, save | Export to various formats |
-| `quick-edit` | resize, rotate, color | Simple layer edits |
-| `background-remove` | background, remove | Foreground/background separation |
+```
++-------------------------------------------------------------------+
+|                    Image Master Agent                              |
++-------------------------------------------------------------------+
+|  Phase 1: Analysis                                                 |
+|  - image-decompose, color-palette, text-extract                    |
+|  - font-match, background-remove, QualityChecker                   |
++-------------------------------------------------------------------+
+|  Phase 2: Editing                                                  |
+|  - text-replace, text-effect, text-overlay, style-transfer         |
+|  - smart-upscale, LayerEditor, CompositionEngine                   |
++-------------------------------------------------------------------+
+|  Phase 3: Generation (Nano Banana)                                 |
+|  - nano-banana-generate ($0.039/image)                             |
+|  - nano-banana-pro-generate ($0.15/image, 4K support)              |
+|  - nano-banana-edit, nano-banana-pro-edit                          |
+|  - FinalComposer SubAgent                                          |
++-------------------------------------------------------------------+
+```
 
-### Available SubAgents (Task Delegation)
+### Available Skills (20 Skills)
+
+| Category | Skills |
+|----------|--------|
+| **Core** | image-decompose, layer-export, quick-edit, background-remove |
+| **AI Enhancement** | smart-upscale, style-transfer, color-palette, text-to-layer |
+| **Text Processing** | text-extract, text-translate, text-overlay, text-effect, text-to-path, text-remove, text-replace, font-match |
+| **Generation** | nano-banana-generate, nano-banana-pro-generate, nano-banana-edit, nano-banana-pro-edit |
+
+### Available SubAgents (6 Agents)
 
 | Agent | When to Use | Purpose |
 |-------|-------------|---------|
@@ -198,6 +220,51 @@ This project includes a Claude Code agent system for natural language control.
 | `LayerEditor` | Complex edits | Multi-step editing pipeline |
 | `CompositionEngine` | Combining layers | Moodboards, collages |
 | `QualityChecker` | After decomposition | Validate result quality |
+| `TemplateEngine` | Marketing assets | Template-based composition |
+| `FinalComposer` | Full pipeline | Analysis -> Edit -> Generate |
+
+### Image Generation (Nano Banana)
+
+Generate or edit images using Fal AI's Nano Banana models:
+
+```python
+from src.fal_api.generation import generate_image, edit_image
+
+# Fast generation ($0.039/image)
+result = generate_image(
+    prompt="a beautiful sunset over mountains",
+    model="nano-banana"
+)
+
+# High-quality 4K generation ($0.15/image, 4K: $0.30)
+result = generate_image(
+    prompt="professional product photography",
+    model="nano-banana-pro",
+    resolution="4k"
+)
+
+# Edit existing image
+result = edit_image(
+    image_path="photo.png",
+    prompt="change the background to a beach",
+    model="nano-banana-edit"
+)
+```
+
+### Model Registry
+
+Extensible registry for all Fal AI models:
+
+```python
+from src.fal_api.model_registry import get_model, list_models
+
+# Get model info
+model = get_model("nano-banana-pro")
+print(f"Price: ${model.price_per_image}")
+
+# List available models
+models = list_models()
+```
 
 ### Example Commands
 
@@ -205,8 +272,18 @@ This project includes a Claude Code agent system for natural language control.
 "Decompose this image into 5 layers"
 "Remove background from photo.jpg"
 "Export layers to PPTX"
+"Generate a sunset image with Nano Banana Pro"
+"Edit this photo to add warm lighting"
 "Process all images in the photos folder"
 "Create a moodboard with these images"
+```
+
+### Test Suite
+
+**409 automated tests** with 100% pass rate:
+
+```bash
+python tests/run_all_tests.py
 ```
 
 

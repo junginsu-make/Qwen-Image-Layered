@@ -8,7 +8,7 @@ Decomposes images into multiple RGBA layers for editing without local GPU.
 ## Tech Stack
 
 - Python 3.10+
-- Fal AI API (qwen-image-layered model)
+- Fal AI API (qwen-image-layered, nano-banana, nano-banana-pro)
 - Pillow for image processing
 - python-pptx, psd-tools for export
 - Gradio for test interface
@@ -42,21 +42,53 @@ Qwen-Image-Layered/
 │       ├── AGENTS.md      # API rules
 │       ├── decompose.py   # Core decomposition
 │       ├── export.py      # Multi-format export
+│       ├── generation.py  # Image generation/editing (NEW)
+│       ├── model_registry.py # Extensible model registry (NEW)
 │       ├── app_test.py    # Test web UI
 │       └── run_demo.py    # CLI tool
 ├── .claude/
 │   ├── AGENTS.md          # Agent system rules
 │   ├── CLAUDE.md          # This file
-│   ├── skills/            # Auto-trigger modules
-│   └── agents/            # Task delegation
+│   ├── skills/            # Auto-trigger modules (20 skills)
+│   └── agents/            # Task delegation (6 agents)
 ├── docs/
 │   ├── PRD.md             # Requirements
 │   ├── LLD.md             # Design
+│   ├── QUICK_START.md     # User guide
 │   └── plans/             # Implementation plans
+├── tests/                 # Test suites (409 tests)
 └── assets/test_images/    # Sample images
 ```
 
-## Available Skills
+## System Pipeline
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    Image Master Agent                            │
+├─────────────────────────────────────────────────────────────────┤
+│  Phase 1: 분석 (Analysis)                                        │
+│  ├── image-decompose (레이어 분해)                               │
+│  ├── color-palette (색상 추출)                                   │
+│  ├── text-extract (OCR)                                          │
+│  ├── font-match (폰트 식별)                                      │
+│  └── background-remove (배경 제거)                               │
+├─────────────────────────────────────────────────────────────────┤
+│  Phase 2: 편집 (Editing)                                         │
+│  ├── text-replace (텍스트 교체)                                  │
+│  ├── text-effect (텍스트 효과)                                   │
+│  ├── text-overlay (텍스트 추가)                                  │
+│  ├── style-transfer (스타일 변환)                                │
+│  └── smart-upscale (업스케일)                                    │
+├─────────────────────────────────────────────────────────────────┤
+│  Phase 3: 생성 (Generation) - NEW                                │
+│  ├── nano-banana-generate (빠른 이미지 생성)                     │
+│  ├── nano-banana-pro-generate (고품질 이미지 생성)               │
+│  ├── nano-banana-edit (이미지 편집)                              │
+│  └── nano-banana-pro-edit (고급 이미지 편집)                     │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+## Available Skills (20 Skills)
 
 ### Core Skills
 | Skill | Trigger | Action |
@@ -86,7 +118,15 @@ Qwen-Image-Layered/
 | text-replace | "교체", "replace" | Replace text in images |
 | font-match | "폰트 찾기", "font" | Identify fonts |
 
-## Available SubAgents
+### Generation Skills (Phase 3 - NEW)
+| Skill | Trigger | Action | Cost |
+|-------|---------|--------|------|
+| nano-banana-generate | "이미지 생성", "generate" | Fast text-to-image | $0.039/이미지 |
+| nano-banana-pro-generate | "고품질 생성", "pro generate" | High-quality 4K generation | $0.15/이미지 |
+| nano-banana-edit | "편집", "edit" | Fast image editing | $0.039/이미지 |
+| nano-banana-pro-edit | "고급 편집", "pro edit" | Advanced semantic editing | $0.15/이미지 |
+
+## Available SubAgents (6 Agents)
 
 | Agent | When Used | Purpose |
 |-------|-----------|---------|
@@ -95,6 +135,46 @@ Qwen-Image-Layered/
 | CompositionEngine | Combining layers | Moodboards, collages |
 | QualityChecker | After decompose | Validate results |
 | TemplateEngine | Marketing assets | Template composition |
+| **FinalComposer** | Full pipeline | Analysis→Edit→Generate (NEW) |
+
+## Model Registry
+
+확장 가능한 모델 레지스트리로 새 Fal AI 모델 쉽게 추가 가능:
+
+```python
+from src.fal_api.model_registry import ModelRegistry, get_model, list_models
+
+# 모델 정보 조회
+model = get_model("nano-banana-pro")
+print(f"Price: ${model.price_per_image}")
+
+# 모델 목록 조회
+gen_models = list_models(model_type=ModelType.TEXT_TO_IMAGE)
+
+# 새 모델 등록
+ModelRegistry.register(
+    "custom-model",
+    endpoint="fal-ai/custom",
+    model_type=ModelType.TEXT_TO_IMAGE,
+    tier=ModelTier.STANDARD,
+    price_per_image=0.05,
+    description="Custom model"
+)
+```
+
+### 등록된 모델
+
+| Model | Type | Tier | Price |
+|-------|------|------|-------|
+| nano-banana | TEXT_TO_IMAGE | FAST | $0.039 |
+| nano-banana-pro | TEXT_TO_IMAGE | PRO | $0.15 |
+| nano-banana-edit | IMAGE_EDIT | FAST | $0.039 |
+| nano-banana-pro-edit | IMAGE_EDIT | PRO | $0.15 |
+| flux-schnell | TEXT_TO_IMAGE | FAST | $0.003 |
+| flux-dev | TEXT_TO_IMAGE | STANDARD | $0.025 |
+| creative-upscaler | UPSCALE | STANDARD | $0.02 |
+| llava-next | ANALYSIS | STANDARD | $0.01 |
+| lama-inpainting | IMAGE_EDIT | STANDARD | $0.01 |
 
 ## Key Commands
 
@@ -115,16 +195,61 @@ exporter = LayerExporter(layer_files)
 exporter.export_all("./output", "my_layers")
 ```
 
+### Image Generation (NEW)
+```python
+from src.fal_api.generation import generate_image, edit_image
+
+# Generate image from text
+result = generate_image(
+    prompt="a beautiful sunset over mountains",
+    model="nano-banana-pro",
+    resolution="4k"
+)
+
+# Edit existing image
+result = edit_image(
+    image_path="photo.png",
+    prompt="change the sky to purple",
+    model="nano-banana-edit"
+)
+```
+
+## Test Suites
+
+| Suite | Tests | Description |
+|-------|-------|-------------|
+| TDD Compliance | 29 | Core system verification |
+| AI Enhancement | 25 | AI skill tests |
+| Text Processing | 34 | Text skill tests |
+| Phase 3 Generation | 89 | Generation system tests |
+| Pipeline Integration | 61 | Full pipeline tests |
+| Mock API | 55 | API logic tests |
+| Integration | 57 | System integration tests |
+| Error Handling | 59 | Error handling tests |
+| **Total** | **409** | **100% Pass Rate** |
+
+```bash
+# Run all tests
+python tests/run_all_tests.py
+```
+
 ## Environment Variables
 
 | Variable | Required | Description |
 |----------|----------|-------------|
 | FAL_KEY | Yes | Fal AI API key |
 
-## Cost
+## Cost Summary
 
-- ~$0.05 per image
-- 15-30 seconds processing time
+| Operation | Cost |
+|-----------|------|
+| Image decomposition | ~$0.05/image |
+| Nano Banana generation | $0.039/image |
+| Nano Banana Pro generation (2K) | $0.15/image |
+| Nano Banana Pro generation (4K) | $0.30/image |
+| Upscale | ~$0.02/image |
+| Style transfer | ~$0.03/image |
+| OCR | ~$0.01/image |
 
 ## Golden Rules
 
@@ -132,10 +257,12 @@ exporter.export_all("./output", "my_layers")
 2. Always preserve RGBA alpha channel
 3. Max 10 layers per request
 4. Use 640px resolution for best results
+5. Use ModelRegistry for model selection
 
 ## Documentation
 
 - [PRD](../docs/PRD.md) - Product requirements
 - [LLD](../docs/LLD.md) - Technical design
+- [Quick Start](../docs/QUICK_START.md) - User guide
 - [Plan](../docs/plans/PLAN_agent_system.md) - Implementation plan
 - [Root AGENTS.md](../AGENTS.md) - Project rules

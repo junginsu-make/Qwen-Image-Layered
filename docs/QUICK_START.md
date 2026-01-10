@@ -403,11 +403,104 @@ A: text-extract의 language 옵션을 'ko'로 설정하세요.
 
 ---
 
+## Phase 3: 이미지 생성 (Nano Banana)
+
+Phase 3는 분석과 편집 결과를 바탕으로 최종 이미지를 생성합니다.
+
+### 사용 가능한 모델
+
+| 모델 | 용도 | 비용 | 특징 |
+|------|------|------|------|
+| nano-banana | 빠른 생성 | $0.039/이미지 | 빠른 반복, 초안 |
+| nano-banana-pro | 고품질 생성 | $0.15/이미지 (4K: $0.30) | 완벽한 텍스트, 4K 지원 |
+| nano-banana-edit | 빠른 편집 | $0.039/이미지 | 간단한 수정 |
+| nano-banana-pro-edit | 고급 편집 | $0.15/이미지 | 시맨틱 이해 기반 |
+
+### 이미지 생성 예제
+
+```python
+from src.fal_api.generation import generate_image, edit_image
+
+# 빠른 생성 (초안용)
+result = generate_image(
+    prompt="a cute cat sitting on a couch",
+    model="nano-banana"
+)
+
+# 고품질 생성 (프로덕션용)
+result = generate_image(
+    prompt="professional product photography of a watch",
+    model="nano-banana-pro",
+    resolution="4k"
+)
+
+print(f"생성된 이미지: {result['generated_images']}")
+print(f"비용: ${result['cost']}")
+```
+
+### 이미지 편집 예제
+
+```python
+# 빠른 편집
+result = edit_image(
+    image_path="photo.png",
+    prompt="change the sky to purple sunset",
+    model="nano-banana-edit"
+)
+
+# 고급 편집 (시맨틱 이해)
+result = edit_image(
+    image_path="portrait.png",
+    prompt="add warm golden hour lighting while preserving skin tones",
+    model="nano-banana-pro-edit",
+    resolution="4k"
+)
+```
+
+### FinalComposer SubAgent
+
+전체 파이프라인을 자동 실행하는 에이전트:
+
+```
+사용 시점: 분석 -> 편집 -> 생성 전체 워크플로우
+
+예시:
+- "이 이미지를 분석해서 마케팅 배너 만들어줘"
+- "제품 사진을 고품질로 재생성해줘"
+
+기능:
+1. 이미지 분석 (색상, 텍스트, 레이어)
+2. 최적 모델 자동 선택
+3. 컨텍스트 기반 프롬프트 강화
+4. 최종 이미지 생성
+```
+
+### 모델 레지스트리
+
+새 모델을 쉽게 추가할 수 있는 확장 가능한 구조:
+
+```python
+from src.fal_api.model_registry import ModelRegistry, get_model, list_models
+
+# 모델 정보 조회
+model = get_model("nano-banana-pro")
+print(f"모델: {model.name}")
+print(f"가격: ${model.price_per_image}")
+print(f"4K 지원: {model.supports_4k}")
+
+# 사용 가능한 모델 목록
+all_models = list_models()
+for m in all_models:
+    print(f"- {m.name}: {m.tier.value}, ${m.price_per_image}")
+```
+
+---
+
 ## 추가 리소스
 
-- [PRD 문서](docs/PRD.md) - 제품 요구사항
-- [LLD 문서](docs/LLD.md) - 기술 설계
-- [AGENTS.md](AGENTS.md) - 시스템 규칙
+- [PRD 문서](PRD.md) - 제품 요구사항
+- [LLD 문서](LLD.md) - 기술 설계
+- [AGENTS.md](../AGENTS.md) - 시스템 규칙
 - [API 문서](https://fal.ai/docs) - Fal AI API
 
 ---
@@ -417,10 +510,26 @@ A: text-extract의 language 옵션을 'ko'로 설정하세요.
 | 작업 | 예상 비용 |
 |------|----------|
 | 이미지 분해 | ~$0.05/이미지 |
+| Nano Banana 생성 | $0.039/이미지 |
+| Nano Banana Pro 생성 (2K) | $0.15/이미지 |
+| Nano Banana Pro 생성 (4K) | $0.30/이미지 |
 | 업스케일 | ~$0.02/이미지 |
 | 스타일 변환 | ~$0.03/이미지 |
 | 텍스트 생성 | ~$0.03/이미지 |
 | OCR | ~$0.01/이미지 |
+
+---
+
+## 테스트 실행
+
+```bash
+# 전체 테스트 실행 (409개 테스트)
+python tests/run_all_tests.py
+
+# Phase 3 테스트만 실행
+python tests/run_phase3_tests.py
+python tests/test_pipeline_integration.py
+```
 
 ---
 
