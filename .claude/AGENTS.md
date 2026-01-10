@@ -18,7 +18,15 @@ Defines automated triggers and task delegation patterns.
 │   ├── smart-upscale/
 │   ├── style-transfer/
 │   ├── color-palette/
-│   └── text-to-layer/
+│   ├── text-to-layer/
+│   ├── text-extract/
+│   ├── text-translate/
+│   ├── text-overlay/
+│   ├── text-effect/
+│   ├── text-to-path/
+│   ├── text-remove/
+│   ├── text-replace/
+│   └── font-match/
 └── agents/             # Task delegation agents
     ├── batch_processor.md
     ├── layer_editor.md
@@ -46,6 +54,18 @@ Defines automated triggers and task delegation patterns.
 | style-transfer | style, watercolor, oil | Apply artistic styles |
 | color-palette | palette, colors, extract | Extract color schemes |
 | text-to-layer | generate, create layer | Create layers from text |
+
+### Text Processing Skills
+| Skill | Trigger Keywords | Action |
+|-------|------------------|--------|
+| text-extract | OCR, extract text | Extract text from images |
+| text-translate | translate, convert | Translate text content |
+| text-overlay | add text, watermark | Add text to images |
+| text-effect | shadow, glow, neon | Apply text effects |
+| text-to-path | curved, circular text | Text along paths |
+| text-remove | remove text, erase | Remove text via AI |
+| text-replace | replace, swap text | Replace text in images |
+| font-match | identify font, font match | Identify fonts from images |
 
 ## Available SubAgents
 

@@ -74,6 +74,18 @@ Qwen-Image-Layered/
 | color-palette | "팔레트", "colors" | Extract color schemes |
 | text-to-layer | "생성", "generate" | Create layers from text |
 
+### Text Processing Skills
+| Skill | Trigger | Action |
+|-------|---------|--------|
+| text-extract | "OCR", "텍스트 추출" | Extract text from images |
+| text-translate | "번역", "translate" | Translate text content |
+| text-overlay | "텍스트 추가", "watermark" | Add text to images |
+| text-effect | "그림자", "neon" | Apply text effects |
+| text-to-path | "곡선", "circular" | Text along paths |
+| text-remove | "텍스트 제거", "erase" | Remove text via AI |
+| text-replace | "교체", "replace" | Replace text in images |
+| font-match | "폰트 찾기", "font" | Identify fonts |
+
 ## Available SubAgents
 
 | Agent | When Used | Purpose |

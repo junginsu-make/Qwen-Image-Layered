@@ -92,7 +92,9 @@ print("="*60)
 
 SKILLS = [
     "image-decompose", "layer-export", "quick-edit", "background-remove",
-    "smart-upscale", "style-transfer", "color-palette", "text-to-layer"
+    "smart-upscale", "style-transfer", "color-palette", "text-to-layer",
+    "text-extract", "text-translate", "text-overlay", "text-effect",
+    "text-to-path", "text-remove", "text-replace", "font-match"
 ]
 
 @test("Skills directory exists")
