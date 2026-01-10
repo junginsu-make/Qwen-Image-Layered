@@ -53,14 +53,14 @@ Qwen-Image-Layered/
 ├── .claude/
 │   ├── AGENTS.md          # Agent system rules
 │   ├── CLAUDE.md          # This file
-│   ├── skills/            # Auto-trigger modules (21 skills)
-│   └── agents/            # Task delegation (7 agents)
+│   ├── skills/            # Auto-trigger modules (25 skills)
+│   └── agents/            # Task delegation (8 agents)
 ├── docs/
 │   ├── PRD.md             # Requirements
 │   ├── LLD.md             # Design
 │   ├── QUICK_START.md     # User guide
 │   └── plans/             # Implementation plans
-├── tests/                 # Test suites (487 tests)
+├── tests/                 # Test suites (539 tests)
 └── assets/test_images/    # Sample images
 ```
 
@@ -92,7 +92,7 @@ Qwen-Image-Layered/
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-## Available Skills (21 Skills)
+## Available Skills (25 Skills)
 
 ### Core Skills
 | Skill | Trigger | Action |
@@ -135,7 +135,15 @@ Qwen-Image-Layered/
 |-------|---------|--------|
 | system-health | "시스템 상태", "health check" | Run system diagnostics |
 
-## Available SubAgents (7 Agents)
+### LLM Integration Skills (Phase 4 - NEW)
+| Skill | Trigger | Action |
+|-------|---------|--------|
+| prompt-optimizer | "프롬프트 개선", "optimize prompt" | AI-enhanced prompt improvement |
+| smart-model-select | "모델 선택", "best model" | Cost-quality optimized model selection |
+| quality-check | "품질 검사", "validate" | Vision AI quality validation |
+| auto-recovery | "오류 복구", "auto retry" | Intelligent error recovery |
+
+## Available SubAgents (8 Agents)
 
 | Agent | When Used | Purpose |
 |-------|-----------|---------|
@@ -145,7 +153,8 @@ Qwen-Image-Layered/
 | QualityChecker | After decompose | Validate results |
 | TemplateEngine | Marketing assets | Template composition |
 | FinalComposer | Full pipeline | Analysis→Edit→Generate |
-| **SystemDiagnostics** | System issues | Error pattern analysis (NEW) |
+| SystemDiagnostics | System issues | Error pattern analysis |
+| **IntelligentOrchestrator** | Natural language | LLM-powered orchestration (NEW) |
 
 ## Model Registry
 
@@ -238,7 +247,8 @@ result = edit_image(
 | Error Handling | 59 | Error handling tests |
 | Infrastructure | 35 | Logging, cost tracking, path validation |
 | Health Check | 43 | Self-diagnostic system tests |
-| **Total** | **487** | **100% Pass Rate** |
+| LLM Integration | 52 | LLM client, prompt, router, quality, recovery |
+| **Total** | **539** | **100% Pass Rate** |
 
 ```bash
 # Run all tests
@@ -330,6 +340,59 @@ for error in errors:
 | Dependencies | All installed | Missing optional | Missing required |
 | Disk Space | > 500MB | 100-500MB | < 100MB |
 | Output Directory | Writable | - | Permission denied |
+
+### LLM Integration (Phase 4 - NEW)
+
+```python
+from src.fal_api import (
+    # Prompt Optimization
+    enhance_prompt, generate_variations, score_prompt,
+    # Model Selection
+    select_model, assess_complexity,
+    # Task Routing
+    route_request, parse_intent, get_execution_plan,
+    # Quality Validation
+    validate_output, rate_generation, detect_artifacts,
+    # Error Recovery
+    analyze_error, suggest_recovery, auto_recover
+)
+
+# Enhance vague prompts (uses Gemini 3 Flash)
+enhanced = enhance_prompt("nice sunset")
+# Returns: "A breathtaking sunset with vibrant orange and purple sky..."
+
+# Select optimal model for budget
+result = select_model(
+    task="Generate product photos",
+    budget=0.20,
+    prefer_quality=True
+)
+print(f"Use: {result['model']} (${result['cost']})")
+
+# Route natural language requests
+plan = route_request("배경 제거하고 스타일 변경해줘")
+print(f"Skills: {plan['skills']}")
+print(f"Estimated cost: ${plan['estimated_cost']}")
+
+# Validate output quality (uses GPT-5.2 Vision)
+quality = validate_output("generated.png")
+print(f"Quality: {quality.overall:.0%} ({quality.level.value})")
+
+# Auto-recover from errors
+result = auto_recover(
+    operation=generate_image,
+    args=("prompt",),
+    max_attempts=3
+)
+```
+
+**LLM Models Used:**
+| Task | Model | Provider | Purpose |
+|------|-------|----------|---------|
+| Prompt Enhancement | gemini-3-flash | Google | Fast, cost-effective |
+| Task Routing | gemini-3-flash | Google | Intent parsing |
+| Quality Validation | gpt-5.2 | OpenAI | Vision analysis |
+| Error Analysis | claude-sonnet-4-5 | Anthropic | Complex reasoning |
 
 ## Environment Variables
 

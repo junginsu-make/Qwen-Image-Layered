@@ -72,6 +72,37 @@ from .generation import (
     quick_edit, pro_edit
 )
 
+# Phase 4: LLM Integration modules
+from .llm_client import (
+    LLMClient, LLMProvider, LLMResponse,
+    query_llm, query_with_image, get_available_providers
+)
+
+from .prompt_optimizer import (
+    PromptOptimizer, PromptStyle, PromptAnalysis,
+    enhance_prompt, generate_variations, score_prompt
+)
+
+from .model_selector import (
+    ModelSelector, TaskComplexity, TaskType,
+    select_model, assess_complexity, calculate_cost_quality_score
+)
+
+from .intelligent_router import (
+    TaskRouter, Intent, ExecutionStep,
+    route_request, parse_intent, get_execution_plan
+)
+
+from .quality_validator import (
+    QualityValidator, QualityScore, QualityLevel,
+    validate_output, rate_generation, detect_artifacts
+)
+
+from .error_recovery import (
+    ErrorRecovery, RecoveryStrategy, ErrorSeverity,
+    analyze_error, suggest_recovery, auto_recover
+)
+
 __all__ = [
     # Logging
     'LoggerFactory',
@@ -172,4 +203,41 @@ __all__ = [
     'pro_generate',
     'quick_edit',
     'pro_edit',
+    # Phase 4: LLM Integration
+    'LLMClient',
+    'LLMProvider',
+    'LLMResponse',
+    'query_llm',
+    'query_with_image',
+    'get_available_providers',
+    'PromptOptimizer',
+    'PromptStyle',
+    'PromptAnalysis',
+    'enhance_prompt',
+    'generate_variations',
+    'score_prompt',
+    'ModelSelector',
+    'TaskComplexity',
+    'TaskType',
+    'select_model',
+    'assess_complexity',
+    'calculate_cost_quality_score',
+    'TaskRouter',
+    'Intent',
+    'ExecutionStep',
+    'route_request',
+    'parse_intent',
+    'get_execution_plan',
+    'QualityValidator',
+    'QualityScore',
+    'QualityLevel',
+    'validate_output',
+    'rate_generation',
+    'detect_artifacts',
+    'ErrorRecovery',
+    'RecoveryStrategy',
+    'ErrorSeverity',
+    'analyze_error',
+    'suggest_recovery',
+    'auto_recover',
 ]
