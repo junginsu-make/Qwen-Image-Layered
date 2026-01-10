@@ -119,6 +119,174 @@ Moreover, decomposition can be applied recursively: any layer can itself be furt
 ![Example Image](https://qianwen-res.oss-cn-beijing.aliyuncs.com/Qwen-Image/layered/幻灯片9.JPG)
 
 
+## Cloud API (No GPU Required)
+
+If you don't have a local GPU, you can use the **Fal AI API** to run Qwen-Image-Layered in the cloud.
+
+### Setup
+
+1. Install dependencies:
+```bash
+pip install -r requirements-fal.txt
+```
+
+2. Get your API key from [fal.ai](https://fal.ai) and create a `.env` file:
+```bash
+cp .env.example .env
+# Edit .env and add your FAL_KEY
+```
+
+### Usage
+
+**Command Line:**
+```bash
+# Using test image
+python src/fal_api/run_demo.py --test-image 1 --layers 4
+
+# Using custom image
+python src/fal_api/run_demo.py --image path/to/image.png --layers 5 --output ./my_output
+```
+
+**Python API:**
+```python
+from src.fal_api import ImageLayerDecomposer, LayerExporter
+
+# Decompose image
+decomposer = ImageLayerDecomposer()
+layer_files = decomposer.decompose_and_save(
+    image_source="path/to/image.png",
+    output_dir="./output",
+    num_layers=4,
+)
+
+# Export to multiple formats
+exporter = LayerExporter(layer_files)
+results = exporter.export_all("./output", "my_layers")
+# Results: PNG, PPTX, PSD, ZIP
+```
+
+**Simple one-liner:**
+```python
+from src.fal_api.decompose import decompose_image
+
+layer_files = decompose_image("image.png", output_dir="./output", num_layers=4)
+```
+
+### Cost
+- Approximately **$0.05 per image**
+- Processing time: 15-30 seconds
+
+
+## AI Agent System (Claude Code Integration)
+
+This project includes a Claude Code agent system for natural language control with **20 Skills** and **6 SubAgents**.
+
+### System Pipeline
+
+```
++-------------------------------------------------------------------+
+|                    Image Master Agent                              |
++-------------------------------------------------------------------+
+|  Phase 1: Analysis                                                 |
+|  - image-decompose, color-palette, text-extract                    |
+|  - font-match, background-remove, QualityChecker                   |
++-------------------------------------------------------------------+
+|  Phase 2: Editing                                                  |
+|  - text-replace, text-effect, text-overlay, style-transfer         |
+|  - smart-upscale, LayerEditor, CompositionEngine                   |
++-------------------------------------------------------------------+
+|  Phase 3: Generation (Nano Banana)                                 |
+|  - nano-banana-generate ($0.039/image)                             |
+|  - nano-banana-pro-generate ($0.15/image, 4K support)              |
+|  - nano-banana-edit, nano-banana-pro-edit                          |
+|  - FinalComposer SubAgent                                          |
++-------------------------------------------------------------------+
+```
+
+### Available Skills (20 Skills)
+
+| Category | Skills |
+|----------|--------|
+| **Core** | image-decompose, layer-export, quick-edit, background-remove |
+| **AI Enhancement** | smart-upscale, style-transfer, color-palette, text-to-layer |
+| **Text Processing** | text-extract, text-translate, text-overlay, text-effect, text-to-path, text-remove, text-replace, font-match |
+| **Generation** | nano-banana-generate, nano-banana-pro-generate, nano-banana-edit, nano-banana-pro-edit |
+
+### Available SubAgents (6 Agents)
+
+| Agent | When to Use | Purpose |
+|-------|-------------|---------|
+| `BatchProcessor` | Multiple images | Bulk processing with progress |
+| `LayerEditor` | Complex edits | Multi-step editing pipeline |
+| `CompositionEngine` | Combining layers | Moodboards, collages |
+| `QualityChecker` | After decomposition | Validate result quality |
+| `TemplateEngine` | Marketing assets | Template-based composition |
+| `FinalComposer` | Full pipeline | Analysis -> Edit -> Generate |
+
+### Image Generation (Nano Banana)
+
+Generate or edit images using Fal AI's Nano Banana models:
+
+```python
+from src.fal_api.generation import generate_image, edit_image
+
+# Fast generation ($0.039/image)
+result = generate_image(
+    prompt="a beautiful sunset over mountains",
+    model="nano-banana"
+)
+
+# High-quality 4K generation ($0.15/image, 4K: $0.30)
+result = generate_image(
+    prompt="professional product photography",
+    model="nano-banana-pro",
+    resolution="4k"
+)
+
+# Edit existing image
+result = edit_image(
+    image_path="photo.png",
+    prompt="change the background to a beach",
+    model="nano-banana-edit"
+)
+```
+
+### Model Registry
+
+Extensible registry for all Fal AI models:
+
+```python
+from src.fal_api.model_registry import get_model, list_models
+
+# Get model info
+model = get_model("nano-banana-pro")
+print(f"Price: ${model.price_per_image}")
+
+# List available models
+models = list_models()
+```
+
+### Example Commands
+
+```
+"Decompose this image into 5 layers"
+"Remove background from photo.jpg"
+"Export layers to PPTX"
+"Generate a sunset image with Nano Banana Pro"
+"Edit this photo to add warm lighting"
+"Process all images in the photos folder"
+"Create a moodboard with these images"
+```
+
+### Test Suite
+
+**444 automated tests** with 100% pass rate:
+
+```bash
+python tests/run_all_tests.py
+```
+
+
 ## License Agreement
 
 Qwen-Image-Layered is licensed under Apache 2.0. 
