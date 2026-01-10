@@ -56,6 +56,8 @@ def main():
         ("TDD Compliance Tests", "tests/run_tests.py"),
         ("AI Enhancement Skills Tests", "tests/run_new_tests.py"),
         ("Text Processing Skills Tests", "tests/run_text_tests.py"),
+        ("Phase 3 Generation Tests", "tests/run_phase3_tests.py"),
+        ("Pipeline Integration Tests", "tests/test_pipeline_integration.py"),
         ("Mock API Tests", "tests/test_mock_api.py"),
         ("Integration Tests", "tests/test_integration.py"),
         ("Error Handling Tests", "tests/test_error_handling.py"),
