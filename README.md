@@ -280,7 +280,7 @@ models = list_models()
 
 ### Test Suite
 
-**409 automated tests** with 100% pass rate:
+**444 automated tests** with 100% pass rate:
 
 ```bash
 python tests/run_all_tests.py

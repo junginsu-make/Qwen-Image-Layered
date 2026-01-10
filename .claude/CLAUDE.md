@@ -42,8 +42,11 @@ Qwen-Image-Layered/
 │       ├── AGENTS.md      # API rules
 │       ├── decompose.py   # Core decomposition
 │       ├── export.py      # Multi-format export
-│       ├── generation.py  # Image generation/editing (NEW)
-│       ├── model_registry.py # Extensible model registry (NEW)
+│       ├── generation.py  # Image generation/editing
+│       ├── model_registry.py # Extensible model registry
+│       ├── logging_config.py # Centralized logging
+│       ├── cost_tracker.py # API cost tracking
+│       ├── path_validator.py # Path validation utilities
 │       ├── app_test.py    # Test web UI
 │       └── run_demo.py    # CLI tool
 ├── .claude/
@@ -56,7 +59,7 @@ Qwen-Image-Layered/
 │   ├── LLD.md             # Design
 │   ├── QUICK_START.md     # User guide
 │   └── plans/             # Implementation plans
-├── tests/                 # Test suites (409 tests)
+├── tests/                 # Test suites (444 tests)
 └── assets/test_images/    # Sample images
 ```
 
@@ -226,11 +229,60 @@ result = edit_image(
 | Mock API | 55 | API logic tests |
 | Integration | 57 | System integration tests |
 | Error Handling | 59 | Error handling tests |
-| **Total** | **409** | **100% Pass Rate** |
+| Infrastructure | 35 | Logging, cost tracking, path validation |
+| **Total** | **444** | **100% Pass Rate** |
 
 ```bash
 # Run all tests
 python tests/run_all_tests.py
+```
+
+## Infrastructure Modules
+
+### Logging (logging_config.py)
+
+```python
+from src.fal_api import configure_logging, get_logger
+
+# Configure logging
+configure_logging(level="DEBUG", log_to_file=True, log_dir="./logs")
+
+# Get logger for module
+logger = get_logger("my_module")
+logger.info("Processing image...")
+```
+
+### Cost Tracking (cost_tracker.py)
+
+```python
+from src.fal_api import CostTracker, record_cost, get_cost_report, OperationType
+
+# Record costs
+record_cost(OperationType.GENERATE, "nano-banana-pro", 0.15)
+record_cost(OperationType.EDIT, "nano-banana-edit", 0.039)
+
+# Get report
+print(get_cost_report())
+
+# With budget limit
+tracker = CostTracker(budget_limit=10.00)
+tracker.record(OperationType.GENERATE, "model", 0.50)
+print(f"Remaining: ${tracker.budget_limit - tracker.get_total():.2f}")
+```
+
+### Path Validation (path_validator.py)
+
+```python
+from src.fal_api import validate_image, ensure_dir, list_images
+
+# Validate image path
+path = validate_image("photo.png")  # Raises if invalid
+
+# Ensure directory exists
+output_dir = ensure_dir("./output")
+
+# List all images in directory
+images = list_images("./photos", recursive=True)
 ```
 
 ## Environment Variables
@@ -238,6 +290,9 @@ python tests/run_all_tests.py
 | Variable | Required | Description |
 |----------|----------|-------------|
 | FAL_KEY | Yes | Fal AI API key |
+| FAL_LOG_LEVEL | No | Logging level (DEBUG, INFO, WARNING) |
+| FAL_LOG_DIR | No | Directory for log files |
+| FAL_LOG_TO_FILE | No | Enable file logging (true/false) |
 
 ## Cost Summary
 

@@ -523,7 +523,7 @@ for m in all_models:
 ## 테스트 실행
 
 ```bash
-# 전체 테스트 실행 (409개 테스트)
+# 전체 테스트 실행 (444개 테스트)
 python tests/run_all_tests.py
 
 # Phase 3 테스트만 실행

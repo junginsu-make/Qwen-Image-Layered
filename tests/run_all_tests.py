@@ -61,6 +61,7 @@ def main():
         ("Mock API Tests", "tests/test_mock_api.py"),
         ("Integration Tests", "tests/test_integration.py"),
         ("Error Handling Tests", "tests/test_error_handling.py"),
+        ("Infrastructure Tests", "tests/test_infrastructure.py"),
     ]
 
     total_passed = 0
