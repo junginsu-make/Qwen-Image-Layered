@@ -21,6 +21,13 @@ from .path_validator import (
     SUPPORTED_IMAGE_FORMATS, SUPPORTED_EXPORT_FORMATS
 )
 
+# Health check
+from .health_check import (
+    HealthChecker, CheckStatus,
+    run_health_check, get_system_status, get_recent_errors,
+    record_error, get_health_report, get_json_health_report
+)
+
 # Error handling (import first, no PIL dependency)
 from .errors import (
     FalAPIError, APIKeyError, NetworkError, APITimeoutError,
@@ -89,6 +96,15 @@ __all__ = [
     'safe_filename',
     'SUPPORTED_IMAGE_FORMATS',
     'SUPPORTED_EXPORT_FORMATS',
+    # Health Check
+    'HealthChecker',
+    'CheckStatus',
+    'run_health_check',
+    'get_system_status',
+    'get_recent_errors',
+    'record_error',
+    'get_health_report',
+    'get_json_health_report',
     # Error handling
     'FalAPIError',
     'APIKeyError',

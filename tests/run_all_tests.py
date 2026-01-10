@@ -62,6 +62,7 @@ def main():
         ("Integration Tests", "tests/test_integration.py"),
         ("Error Handling Tests", "tests/test_error_handling.py"),
         ("Infrastructure Tests", "tests/test_infrastructure.py"),
+        ("Health Check Tests", "tests/test_health_check.py"),
     ]
 
     total_passed = 0

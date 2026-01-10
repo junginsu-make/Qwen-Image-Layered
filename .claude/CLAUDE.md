@@ -47,19 +47,20 @@ Qwen-Image-Layered/
 │       ├── logging_config.py # Centralized logging
 │       ├── cost_tracker.py # API cost tracking
 │       ├── path_validator.py # Path validation utilities
+│       ├── health_check.py # Self-diagnostic system
 │       ├── app_test.py    # Test web UI
 │       └── run_demo.py    # CLI tool
 ├── .claude/
 │   ├── AGENTS.md          # Agent system rules
 │   ├── CLAUDE.md          # This file
-│   ├── skills/            # Auto-trigger modules (20 skills)
-│   └── agents/            # Task delegation (6 agents)
+│   ├── skills/            # Auto-trigger modules (21 skills)
+│   └── agents/            # Task delegation (7 agents)
 ├── docs/
 │   ├── PRD.md             # Requirements
 │   ├── LLD.md             # Design
 │   ├── QUICK_START.md     # User guide
 │   └── plans/             # Implementation plans
-├── tests/                 # Test suites (444 tests)
+├── tests/                 # Test suites (487 tests)
 └── assets/test_images/    # Sample images
 ```
 
@@ -91,7 +92,7 @@ Qwen-Image-Layered/
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-## Available Skills (20 Skills)
+## Available Skills (21 Skills)
 
 ### Core Skills
 | Skill | Trigger | Action |
@@ -129,7 +130,12 @@ Qwen-Image-Layered/
 | nano-banana-edit | "편집", "edit" | Fast image editing | $0.039/이미지 |
 | nano-banana-pro-edit | "고급 편집", "pro edit" | Advanced semantic editing | $0.15/이미지 |
 
-## Available SubAgents (6 Agents)
+### System Skills
+| Skill | Trigger | Action |
+|-------|---------|--------|
+| system-health | "시스템 상태", "health check" | Run system diagnostics |
+
+## Available SubAgents (7 Agents)
 
 | Agent | When Used | Purpose |
 |-------|-----------|---------|
@@ -138,7 +144,8 @@ Qwen-Image-Layered/
 | CompositionEngine | Combining layers | Moodboards, collages |
 | QualityChecker | After decompose | Validate results |
 | TemplateEngine | Marketing assets | Template composition |
-| **FinalComposer** | Full pipeline | Analysis→Edit→Generate (NEW) |
+| FinalComposer | Full pipeline | Analysis→Edit→Generate |
+| **SystemDiagnostics** | System issues | Error pattern analysis (NEW) |
 
 ## Model Registry
 
@@ -230,7 +237,8 @@ result = edit_image(
 | Integration | 57 | System integration tests |
 | Error Handling | 59 | Error handling tests |
 | Infrastructure | 35 | Logging, cost tracking, path validation |
-| **Total** | **444** | **100% Pass Rate** |
+| Health Check | 43 | Self-diagnostic system tests |
+| **Total** | **487** | **100% Pass Rate** |
 
 ```bash
 # Run all tests
@@ -284,6 +292,44 @@ output_dir = ensure_dir("./output")
 # List all images in directory
 images = list_images("./photos", recursive=True)
 ```
+
+### Health Check (health_check.py)
+
+```python
+from src.fal_api import (
+    run_health_check, get_system_status,
+    get_health_report, get_recent_errors
+)
+
+# Quick status check
+status = get_system_status()  # Returns: 'ok', 'warning', 'error', or 'unknown'
+
+# Full health check
+results = run_health_check()
+# Returns: {
+#   'api_key': {...},
+#   'dependencies': {...},
+#   'disk_space': {...},
+#   'output_directory': {...},
+#   'overall_status': 'ok'
+# }
+
+# Human-readable report
+print(get_health_report())
+
+# View recent errors
+errors = get_recent_errors(limit=5)
+for error in errors:
+    print(f"[{error['operation']}] {error['message']}")
+```
+
+**Checks Performed:**
+| Check | OK | Warning | Error |
+|-------|-----|---------|-------|
+| API Key | Configured | Too short | Missing |
+| Dependencies | All installed | Missing optional | Missing required |
+| Disk Space | > 500MB | 100-500MB | < 100MB |
+| Output Directory | Writable | - | Permission denied |
 
 ## Environment Variables
 
