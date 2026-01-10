@@ -3,6 +3,14 @@ Fal AI integration for Qwen-Image-Layered.
 Provides cloud-based image layer decomposition and processing.
 """
 
+# Error handling (import first, no PIL dependency)
+from .errors import (
+    FalAPIError, APIKeyError, NetworkError, APITimeoutError,
+    APIRateLimitError, ImageProcessingError, InvalidInputError,
+    DependencyError, safe_result, error_result, handle_api_errors,
+    retry_on_error, validate_api_key, validate_file_exists
+)
+
 # Core modules
 from .decompose import ImageLayerDecomposer, decompose_image
 from .export import LayerExporter
@@ -24,6 +32,21 @@ from .text_replace import TextReplacer, replace_text
 from .font_match import FontMatcher, identify_font
 
 __all__ = [
+    # Error handling
+    'FalAPIError',
+    'APIKeyError',
+    'NetworkError',
+    'APITimeoutError',
+    'APIRateLimitError',
+    'ImageProcessingError',
+    'InvalidInputError',
+    'DependencyError',
+    'safe_result',
+    'error_result',
+    'handle_api_errors',
+    'retry_on_error',
+    'validate_api_key',
+    'validate_file_exists',
     # Core
     'ImageLayerDecomposer',
     'decompose_image',
