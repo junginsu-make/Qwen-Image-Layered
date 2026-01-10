@@ -4,12 +4,23 @@ No local GPU required - uses cloud-based inference.
 """
 
 import os
-import fal_client
 import requests
 from PIL import Image
 from pathlib import Path
 from typing import Optional, List
-from dotenv import load_dotenv
+
+try:
+    from dotenv import load_dotenv
+except ImportError:
+    def load_dotenv():
+        pass
+
+try:
+    import fal_client
+    FAL_AVAILABLE = True
+except ImportError:
+    fal_client = None
+    FAL_AVAILABLE = False
 
 
 class ImageLayerDecomposer:

@@ -8,8 +8,20 @@ import zipfile
 from pathlib import Path
 from typing import List, Optional
 from PIL import Image
-from pptx import Presentation
-from psd_tools import PSDImage
+
+try:
+    from pptx import Presentation
+    PPTX_AVAILABLE = True
+except ImportError:
+    Presentation = None
+    PPTX_AVAILABLE = False
+
+try:
+    from psd_tools import PSDImage
+    PSD_AVAILABLE = True
+except ImportError:
+    PSDImage = None
+    PSD_AVAILABLE = False
 
 
 class LayerExporter:
