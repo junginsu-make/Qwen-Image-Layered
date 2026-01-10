@@ -58,12 +58,21 @@ Qwen-Image-Layered/
 
 ## Available Skills
 
+### Core Skills
 | Skill | Trigger | Action |
 |-------|---------|--------|
 | image-decompose | "분해", "decompose" | Image to layers |
 | layer-export | "내보내기", "export" | Export to PPTX/PSD/ZIP |
 | quick-edit | "색상 변경", "resize" | Simple layer edits |
 | background-remove | "배경 제거", "누끼" | 2-layer separation |
+
+### AI Enhancement Skills
+| Skill | Trigger | Action |
+|-------|---------|--------|
+| smart-upscale | "업스케일", "upscale" | AI 2x/4x upscaling |
+| style-transfer | "스타일", "watercolor" | Apply artistic styles |
+| color-palette | "팔레트", "colors" | Extract color schemes |
+| text-to-layer | "생성", "generate" | Create layers from text |
 
 ## Available SubAgents
 
@@ -73,6 +82,7 @@ Qwen-Image-Layered/
 | LayerEditor | Multi-step edits | Complex editing |
 | CompositionEngine | Combining layers | Moodboards, collages |
 | QualityChecker | After decompose | Validate results |
+| TemplateEngine | Marketing assets | Template composition |
 
 ## Key Commands
 

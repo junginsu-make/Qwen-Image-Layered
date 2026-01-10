@@ -90,7 +90,10 @@ print("\n" + "="*60)
 print("SKILLS UNIT TESTS")
 print("="*60)
 
-SKILLS = ["image-decompose", "layer-export", "quick-edit", "background-remove"]
+SKILLS = [
+    "image-decompose", "layer-export", "quick-edit", "background-remove",
+    "smart-upscale", "style-transfer", "color-palette", "text-to-layer"
+]
 
 @test("Skills directory exists")
 def test_skills_dir_exists():
@@ -147,7 +150,10 @@ print("\n" + "="*60)
 print("SUBAGENTS UNIT TESTS")
 print("="*60)
 
-AGENTS = ["batch_processor", "layer_editor", "composition_engine", "quality_checker"]
+AGENTS = [
+    "batch_processor", "layer_editor", "composition_engine",
+    "quality_checker", "template_engine"
+]
 VALID_MODELS = ["claude-sonnet-4-20250514", "claude-haiku-3-5-20241022", "claude-opus-4-5-20251101"]
 
 @test("Agents directory exists")

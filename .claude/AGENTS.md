@@ -14,24 +14,38 @@ Defines automated triggers and task delegation patterns.
 │   ├── image-decompose/
 │   ├── layer-export/
 │   ├── quick-edit/
-│   └── background-remove/
+│   ├── background-remove/
+│   ├── smart-upscale/
+│   ├── style-transfer/
+│   ├── color-palette/
+│   └── text-to-layer/
 └── agents/             # Task delegation agents
     ├── batch_processor.md
     ├── layer_editor.md
     ├── composition_engine.md
-    └── quality_checker.md
+    ├── quality_checker.md
+    └── template_engine.md
 ```
 
 ---
 
 ## Available Skills
 
+### Core Skills
 | Skill | Trigger Keywords | Action |
 |-------|------------------|--------|
 | image-decompose | decompose, layer | Image to RGBA layers |
 | layer-export | export, PPTX, PSD | Export to formats |
 | quick-edit | resize, rotate, color | Simple edits |
 | background-remove | background, remove | 2-layer separation |
+
+### AI Enhancement Skills
+| Skill | Trigger Keywords | Action |
+|-------|------------------|--------|
+| smart-upscale | upscale, enhance, resolution | AI image upscaling 2x/4x |
+| style-transfer | style, watercolor, oil | Apply artistic styles |
+| color-palette | palette, colors, extract | Extract color schemes |
+| text-to-layer | generate, create layer | Create layers from text |
 
 ## Available SubAgents
 
@@ -41,6 +55,7 @@ Defines automated triggers and task delegation patterns.
 | LayerEditor | Complex edits | Multi-step editing pipeline |
 | CompositionEngine | Combining layers | Moodboards, collages |
 | QualityChecker | After decompose | Validate result quality |
+| TemplateEngine | Marketing materials | Template-based composition |
 
 ---
 
